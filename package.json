@@ -1,0 +1,12 @@
+{
+  "name": "ricestock-erp",
+  "version": "1.0.0",
+  "description": "Rice Sales & Stock Ledger Web ERP",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1"
+  }
+}
