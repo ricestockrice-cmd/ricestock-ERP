@@ -1,0 +1,934 @@
+{
+  "parties": [
+    {
+      "name": "AKHAYA SAHU",
+      "type": "Supplier",
+      "phone": "",
+      "city": ""
+    },
+    {
+      "name": "CHHANDA PATTNAIL",
+      "type": "Supplier",
+      "phone": "",
+      "city": ""
+    },
+    {
+      "name": "KURA REDDY",
+      "type": "Customer",
+      "phone": "",
+      "city": ""
+    },
+    {
+      "name": "LITU SARAB",
+      "type": "Supplier",
+      "phone": "",
+      "city": ""
+    },
+    {
+      "name": "MITU PATRO",
+      "type": "Supplier",
+      "phone": "",
+      "city": ""
+    },
+    {
+      "name": "NILADRI",
+      "type": "Customer",
+      "phone": "",
+      "city": ""
+    },
+    {
+      "name": "RAGHUNATH GOUDA",
+      "type": "Supplier",
+      "phone": "",
+      "city": ""
+    },
+    {
+      "name": "SILU ROUTA",
+      "type": "Customer",
+      "phone": "",
+      "city": ""
+    },
+    {
+      "name": "TRITHABASI PRADHAN",
+      "type": "Supplier",
+      "phone": "",
+      "city": ""
+    },
+    {
+      "name": "VENKET RAMAN",
+      "type": "Customer",
+      "phone": "",
+      "city": ""
+    }
+  ],
+  "sales": [
+    {
+      "date": "2026-11-10",
+      "invoice_no": "A34",
+      "party_name": "SILU ROUTA",
+      "rst_no": "117",
+      "vehicle_no": "AP 39 T 3159",
+      "product": "NEW 1001",
+      "bags": 380,
+      "quantity_kg": 29410.0,
+      "rate": 1730.0,
+      "total": 660770.1298701299
+    },
+    {
+      "date": "2026-11-11",
+      "invoice_no": "A35",
+      "party_name": "NILADRI",
+      "rst_no": "138",
+      "vehicle_no": "AP 39 T0 7119",
+      "product": "NEW MASURI",
+      "bags": 261,
+      "quantity_kg": 20150.0,
+      "rate": 1730.0,
+      "total": 452720.7792207792
+    },
+    {
+      "date": "2026-11-12",
+      "invoice_no": "A36",
+      "party_name": "SILU ROUTA",
+      "rst_no": "151",
+      "vehicle_no": "AP 21 TY 2587",
+      "product": "NEW 1001",
+      "bags": 330,
+      "quantity_kg": 25320.0,
+      "rate": 1730.0,
+      "total": 568877.922077922
+    },
+    {
+      "date": "2026-11-13",
+      "invoice_no": "A39",
+      "party_name": "NILADRI",
+      "rst_no": "173",
+      "vehicle_no": "MH 09 EM 2896",
+      "product": "NEW 1001",
+      "bags": 330,
+      "quantity_kg": 25360.0,
+      "rate": 1725.0,
+      "total": 568129.8701298701
+    },
+    {
+      "date": "2026-11-14",
+      "invoice_no": "A40",
+      "party_name": "NILADRI",
+      "rst_no": "",
+      "vehicle_no": "TG 36 T 4589",
+      "product": "NEW 1001",
+      "bags": 440,
+      "quantity_kg": 33220.0,
+      "rate": 1730.0,
+      "total": 746371.4285714286
+    },
+    {
+      "date": "2026-11-15",
+      "invoice_no": "A41",
+      "party_name": "KURA REDDY",
+      "rst_no": "229",
+      "vehicle_no": "AP 16 TS 4365",
+      "product": "NEW 1001",
+      "bags": 401,
+      "quantity_kg": 30650.0,
+      "rate": 1730.0,
+      "total": 688629.8701298701
+    },
+    {
+      "date": "2026-11-15",
+      "invoice_no": "A42",
+      "party_name": "SILU ROUTA",
+      "rst_no": "249",
+      "vehicle_no": "AP 39 WK 7794",
+      "product": "1001",
+      "bags": 267,
+      "quantity_kg": 20630.0,
+      "rate": 1770.0,
+      "total": 474222.0779220779
+    },
+    {
+      "date": "2026-11-16",
+      "invoice_no": "A43",
+      "party_name": "KURA REDDY",
+      "rst_no": "252",
+      "vehicle_no": "TN 52 AA 9807",
+      "product": "NEW 1001",
+      "bags": 417,
+      "quantity_kg": 32160.0,
+      "rate": 1771.0,
+      "total": 739680.0
+    },
+    {
+      "date": "2026-11-16",
+      "invoice_no": "A44",
+      "party_name": "NILADRI",
+      "rst_no": "246",
+      "vehicle_no": "AP 39 UC 7459",
+      "product": "NEW MASURI",
+      "bags": 460,
+      "quantity_kg": 35430.0,
+      "rate": 1690.0,
+      "total": 777619.4805194805
+    },
+    {
+      "date": "2026-11-16",
+      "invoice_no": "A45",
+      "party_name": "SILU ROUTA",
+      "rst_no": "",
+      "vehicle_no": "AP 39 WW 0444",
+      "product": "1001",
+      "bags": 200,
+      "quantity_kg": 15380.0,
+      "rate": 1770.0,
+      "total": 353540.25974025973
+    },
+    {
+      "date": "2026-11-16",
+      "invoice_no": "A46",
+      "party_name": "SILU ROUTA",
+      "rst_no": "",
+      "vehicle_no": "MH 47 AS 9127",
+      "product": "NEW MASURI",
+      "bags": 160,
+      "quantity_kg": 12270.0,
+      "rate": 1690.0,
+      "total": 269302.59740259737
+    },
+    {
+      "date": "2026-11-17",
+      "invoice_no": "A47",
+      "party_name": "SILU ROUTA",
+      "rst_no": "280",
+      "vehicle_no": "AP 07 TF 3690",
+      "product": "1001",
+      "bags": 330,
+      "quantity_kg": 25640.0,
+      "rate": 1770.0,
+      "total": 589387.012987013
+    },
+    {
+      "date": "2026-11-18",
+      "invoice_no": "A48",
+      "party_name": "KURA REDDY",
+      "rst_no": "306",
+      "vehicle_no": "AP 39 UL 4377",
+      "product": "1001",
+      "bags": 460,
+      "quantity_kg": 35410.0,
+      "rate": 1771.0,
+      "total": 814430.0
+    },
+    {
+      "date": "2026-11-18",
+      "invoice_no": "A49",
+      "party_name": "SILU ROUTA",
+      "rst_no": "332",
+      "vehicle_no": "AP 07 TJ 0126",
+      "product": "NEW 1001",
+      "bags": 427,
+      "quantity_kg": 32890.0,
+      "rate": 1770.0,
+      "total": 756042.8571428572
+    },
+    {
+      "date": "2026-11-18",
+      "invoice_no": "A50",
+      "party_name": "SILU ROUTA",
+      "rst_no": "342",
+      "vehicle_no": "AP 16 TH 9368",
+      "product": "NEW 1001",
+      "bags": 220,
+      "quantity_kg": 14417.47,
+      "rate": 1770.0,
+      "total": 331414.57012987015
+    },
+    {
+      "date": "2026-11-18",
+      "invoice_no": "A50",
+      "party_name": "SILU ROUTA",
+      "rst_no": "342",
+      "vehicle_no": "AP 16 TH 9368",
+      "product": "NEW MASURI",
+      "bags": 89,
+      "quantity_kg": 5832.53,
+      "rate": 1690.0,
+      "total": 128012.67142857141
+    },
+    {
+      "date": "2026-11-19",
+      "invoice_no": "B1",
+      "party_name": "KURA REDDY",
+      "rst_no": "366",
+      "vehicle_no": "AP 04 TX 2219",
+      "product": "NEW 1001",
+      "bags": 385,
+      "quantity_kg": 29600.0,
+      "rate": 1771.0,
+      "total": 680800.0
+    },
+    {
+      "date": "2026-11-19",
+      "invoice_no": "B2",
+      "party_name": "NILADRI",
+      "rst_no": "392",
+      "vehicle_no": "AP 07 TF 8977",
+      "product": "1001",
+      "bags": 263,
+      "quantity_kg": 20320.0,
+      "rate": 1770.0,
+      "total": 467096.1038961039
+    },
+    {
+      "date": "2026-11-20",
+      "invoice_no": "B3",
+      "party_name": "SILU ROUTA",
+      "rst_no": "405",
+      "vehicle_no": "WB 50 AA 3353",
+      "product": "1009",
+      "bags": 480,
+      "quantity_kg": 36760.0,
+      "rate": 1630.0,
+      "total": 778166.2337662338
+    },
+    {
+      "date": "2026-11-20",
+      "invoice_no": "B4",
+      "party_name": "SILU ROUTA",
+      "rst_no": "412",
+      "vehicle_no": "WB 11 C 7238",
+      "product": "1001",
+      "bags": 265,
+      "quantity_kg": 20400.0,
+      "rate": 1770.0,
+      "total": 468935.06493506493
+    },
+    {
+      "date": "2026-11-20",
+      "invoice_no": "B5",
+      "party_name": "NILADRI",
+      "rst_no": "413",
+      "vehicle_no": "AP 05 TD 1599",
+      "product": "NEW 1001",
+      "bags": 267,
+      "quantity_kg": 20630.0,
+      "rate": 1750.0,
+      "total": 468863.63636363635
+    },
+    {
+      "date": "2026-11-20",
+      "invoice_no": "B6",
+      "party_name": "SILU ROUTA",
+      "rst_no": "418",
+      "vehicle_no": "WB 33 F 2058",
+      "product": "NEW MASURI",
+      "bags": 390,
+      "quantity_kg": 30250.0,
+      "rate": 1690.0,
+      "total": 663928.5714285714
+    },
+    {
+      "date": "2026-11-21",
+      "invoice_no": "B7",
+      "party_name": "NILADRI",
+      "rst_no": "423",
+      "vehicle_no": "AP 39 WC 3459",
+      "product": "1001",
+      "bags": 361,
+      "quantity_kg": 27800.0,
+      "rate": 1750.0,
+      "total": 631818.1818181818
+    },
+    {
+      "date": "2026-11-22",
+      "invoice_no": "B8",
+      "party_name": "SILU ROUTA",
+      "rst_no": "440",
+      "vehicle_no": "TG 34T 9977",
+      "product": "NEW 1001",
+      "bags": 451,
+      "quantity_kg": 34750.0,
+      "rate": 1770.0,
+      "total": 798798.7012987013
+    },
+    {
+      "date": "2026-11-22",
+      "invoice_no": "B9",
+      "party_name": "VENKET RAMAN",
+      "rst_no": "443",
+      "vehicle_no": "AP 37 TJ 1377",
+      "product": "NEW MASURI",
+      "bags": 254,
+      "quantity_kg": 19590.0,
+      "rate": 1680.0,
+      "total": 427418.1818181818
+    },
+    {
+      "date": "2026-11-23",
+      "invoice_no": "B10",
+      "party_name": "SILU ROUTA",
+      "rst_no": "496",
+      "vehicle_no": "WR 33 E 9616",
+      "product": "1001",
+      "bags": 430,
+      "quantity_kg": 33180.0,
+      "rate": 1770.0,
+      "total": 762709.0909090909
+    }
+  ],
+  "purchases": [
+    {
+      "date": "2026-10-27",
+      "invoice_no": "A6",
+      "party_name": "LITU SARAB",
+      "rst_no": "17637",
+      "vehicle_no": "OD 02 DJ 3360",
+      "product": "NEW 1001",
+      "bags": 77,
+      "quantity_kg": 4340.0,
+      "rate": 1660.0,
+      "total": 93563.63636363637
+    },
+    {
+      "date": "2026-11-02",
+      "invoice_no": "A7",
+      "party_name": "LITU SARAB",
+      "rst_no": "17681",
+      "vehicle_no": "OD 02 DJ 3360",
+      "product": "NEW 1001",
+      "bags": 62,
+      "quantity_kg": 4322.0,
+      "rate": 1660.0,
+      "total": 93175.58441558441
+    },
+    {
+      "date": "2026-11-04",
+      "invoice_no": "A8",
+      "party_name": "LITU SARAB",
+      "rst_no": "15",
+      "vehicle_no": "OD 02 DJ 3360",
+      "product": "NEW 1001",
+      "bags": 59,
+      "quantity_kg": 4300.0,
+      "rate": 1660.0,
+      "total": 92701.2987012987
+    },
+    {
+      "date": "2026-11-06",
+      "invoice_no": "A9",
+      "party_name": "LITU SARAB",
+      "rst_no": "48",
+      "vehicle_no": "OD 02 DJ 3360",
+      "product": "NEW 1001",
+      "bags": 58,
+      "quantity_kg": 3880.0,
+      "rate": 1660.0,
+      "total": 83646.75324675324
+    },
+    {
+      "date": "2026-11-08",
+      "invoice_no": "A10",
+      "party_name": "MITU PATRO",
+      "rst_no": "68",
+      "vehicle_no": "0D 02 DH 0991",
+      "product": "NEW 1001",
+      "bags": 0,
+      "quantity_kg": 4200.0,
+      "rate": 1650.0,
+      "total": 90000.0
+    },
+    {
+      "date": "2026-11-08",
+      "invoice_no": "A11",
+      "party_name": "LITU SARAB",
+      "rst_no": "72",
+      "vehicle_no": "0D 02 DJ 3360",
+      "product": "NEW 1001",
+      "bags": 54,
+      "quantity_kg": 3080.0,
+      "rate": 1660.0,
+      "total": 66400.0
+    },
+    {
+      "date": "2026-11-08",
+      "invoice_no": "A11",
+      "party_name": "LITU SARAB",
+      "rst_no": "72",
+      "vehicle_no": "0D 02 DJ 3360",
+      "product": "MAYURI",
+      "bags": 0,
+      "quantity_kg": 1100.0,
+      "rate": 1770.0,
+      "total": 25285.714285714286
+    },
+    {
+      "date": "2026-11-09",
+      "invoice_no": "A12",
+      "party_name": "MITU PATRO",
+      "rst_no": "84",
+      "vehicle_no": "OD 02 DB 9691",
+      "product": "NEW 1001",
+      "bags": 75,
+      "quantity_kg": 4400.0,
+      "rate": 1650.0,
+      "total": 94285.71428571429
+    },
+    {
+      "date": "2026-11-09",
+      "invoice_no": "A13",
+      "party_name": "MITU PATRO",
+      "rst_no": "90",
+      "vehicle_no": "0D 25 F 0226",
+      "product": "NEW 1001",
+      "bags": 46,
+      "quantity_kg": 3570.0,
+      "rate": 1650.0,
+      "total": 76500.0
+    },
+    {
+      "date": "2026-11-09",
+      "invoice_no": "A14",
+      "party_name": "LITU SARAB",
+      "rst_no": "93",
+      "vehicle_no": "0D 02 DJ 3360",
+      "product": "NEW 1001",
+      "bags": 55,
+      "quantity_kg": 3610.0,
+      "rate": 1660.0,
+      "total": 77825.97402597402
+    },
+    {
+      "date": "2026-11-10",
+      "invoice_no": "A15",
+      "party_name": "AKHAYA SAHU",
+      "rst_no": "101",
+      "vehicle_no": "0D 02 BK 6892",
+      "product": "PURUNA MASURI",
+      "bags": 73,
+      "quantity_kg": 4909.25,
+      "rate": 1770.0,
+      "total": 112848.9935064935
+    },
+    {
+      "date": "2026-11-10",
+      "invoice_no": "A15",
+      "party_name": "AKHAYA SAHU",
+      "rst_no": "101",
+      "vehicle_no": "0D 02 BK 6892",
+      "product": "GEDI",
+      "bags": 7,
+      "quantity_kg": 470.75,
+      "rate": 1600.0,
+      "total": 9781.818181818182
+    },
+    {
+      "date": "2026-11-10",
+      "invoice_no": "A16",
+      "party_name": "MITU PATRO",
+      "rst_no": "111",
+      "vehicle_no": "0D 02 DB 9691",
+      "product": "NEW 1001",
+      "bags": 70,
+      "quantity_kg": 4520.0,
+      "rate": 1650.0,
+      "total": 96857.14285714286
+    },
+    {
+      "date": "2026-11-10",
+      "invoice_no": "A17",
+      "party_name": "MITU PATRO",
+      "rst_no": "112",
+      "vehicle_no": "0D 02 D4 0991",
+      "product": "NEW 1001",
+      "bags": 58,
+      "quantity_kg": 4420.0,
+      "rate": 1650.0,
+      "total": 94714.28571428571
+    },
+    {
+      "date": "2026-11-10",
+      "invoice_no": "A18",
+      "party_name": "LITU SARAB",
+      "rst_no": "120",
+      "vehicle_no": "OD 32 L 7688",
+      "product": "NEW 1001",
+      "bags": 60,
+      "quantity_kg": 4490.0,
+      "rate": 1660.0,
+      "total": 96797.4025974026
+    },
+    {
+      "date": "2026-11-10",
+      "invoice_no": "A19",
+      "party_name": "LITU SARAB",
+      "rst_no": "124",
+      "vehicle_no": "0D 02 DJ 3360",
+      "product": "NEW 1001",
+      "bags": 55,
+      "quantity_kg": 4310.0,
+      "rate": 1660.0,
+      "total": 92916.88311688312
+    },
+    {
+      "date": "2026-11-10",
+      "invoice_no": "A20",
+      "party_name": "CHHANDA PATTNAIL",
+      "rst_no": "122",
+      "vehicle_no": "0D 07 6563",
+      "product": "MASURI",
+      "bags": 41,
+      "quantity_kg": 3450.0,
+      "rate": 1650.0,
+      "total": 73928.57142857142
+    },
+    {
+      "date": "2026-11-10",
+      "invoice_no": "A21",
+      "party_name": "CHHANDA PATTNAIL",
+      "rst_no": "123",
+      "vehicle_no": "OD O7 AA 8120",
+      "product": "MASURI",
+      "bags": 48,
+      "quantity_kg": 4150.0,
+      "rate": 1650.0,
+      "total": 88928.57142857142
+    },
+    {
+      "date": "2026-11-11",
+      "invoice_no": "A22",
+      "party_name": "RAGHUNATH GOUDA",
+      "rst_no": "127",
+      "vehicle_no": "OD 02 AB 7969",
+      "product": "PURUNA MASURI",
+      "bags": 66,
+      "quantity_kg": 3313.81,
+      "rate": 1730.0,
+      "total": 74453.13376623376
+    },
+    {
+      "date": "2026-11-11",
+      "invoice_no": "A22",
+      "party_name": "RAGHUNATH GOUDA",
+      "rst_no": "127",
+      "vehicle_no": "OD 02 AB 7969",
+      "product": "GOMO",
+      "bags": 1,
+      "quantity_kg": 45.39,
+      "rate": 1300.0,
+      "total": 766.3246753246754
+    },
+    {
+      "date": "2026-11-11",
+      "invoice_no": "A22",
+      "party_name": "RAGHUNATH GOUDA",
+      "rst_no": "127",
+      "vehicle_no": "OD 02 AB 7969",
+      "product": "GEDI",
+      "bags": 2,
+      "quantity_kg": 90.78,
+      "rate": 1578.0,
+      "total": 1860.4005194805195
+    },
+    {
+      "date": "2026-11-11",
+      "invoice_no": "A23",
+      "party_name": "MITU PATRO",
+      "rst_no": "125",
+      "vehicle_no": "OD 25 F 0226",
+      "product": "NEW 1001",
+      "bags": 48,
+      "quantity_kg": 3320.0,
+      "rate": 1650.0,
+      "total": 71142.85714285714
+    },
+    {
+      "date": "2026-11-11",
+      "invoice_no": "A24",
+      "party_name": "MITU PATRO",
+      "rst_no": "131",
+      "vehicle_no": "0D 02 DF 0852",
+      "product": "NEW 1001",
+      "bags": 56,
+      "quantity_kg": 4380.0,
+      "rate": 1650.0,
+      "total": 93857.14285714286
+    },
+    {
+      "date": "2026-11-12",
+      "invoice_no": "A25",
+      "party_name": "MITU PATRO",
+      "rst_no": "148",
+      "vehicle_no": "0D 32 F 4084",
+      "product": "NEW 1001",
+      "bags": 45,
+      "quantity_kg": 3420.0,
+      "rate": 1670.0,
+      "total": 74174.02597402596
+    },
+    {
+      "date": "2026-11-12",
+      "invoice_no": "A26",
+      "party_name": "RAGHUNATH GOUDA",
+      "rst_no": "155",
+      "vehicle_no": "0D 02 AB 7989",
+      "product": "PURUNA MASURI",
+      "bags": 8,
+      "quantity_kg": 365.28,
+      "rate": 1730.0,
+      "total": 8206.940259740259
+    },
+    {
+      "date": "2026-11-12",
+      "invoice_no": "A26",
+      "party_name": "RAGHUNATH GOUDA",
+      "rst_no": "155",
+      "vehicle_no": "0D 02 AB 7989",
+      "product": "PURUNA 1001",
+      "bags": 27,
+      "quantity_kg": 1232.83,
+      "rate": 1700.0,
+      "total": 27218.324675324675
+    },
+    {
+      "date": "2026-11-12",
+      "invoice_no": "A26",
+      "party_name": "RAGHUNATH GOUDA",
+      "rst_no": "155",
+      "vehicle_no": "0D 02 AB 7989",
+      "product": "NEW PADDY",
+      "bags": 3,
+      "quantity_kg": 136.98,
+      "rate": 1600.0,
+      "total": 2846.337662337662
+    },
+    {
+      "date": "2026-11-12",
+      "invoice_no": "A26",
+      "party_name": "RAGHUNATH GOUDA",
+      "rst_no": "155",
+      "vehicle_no": "0D 02 AB 7989",
+      "product": "GOMO",
+      "bags": 15,
+      "quantity_kg": 684.9,
+      "rate": 1300.0,
+      "total": 11563.246753246753
+    },
+    {
+      "date": "2026-11-12",
+      "invoice_no": "A27",
+      "party_name": "TRITHABASI PRADHAN",
+      "rst_no": "145",
+      "vehicle_no": "OD 07 AP 4077",
+      "product": "NEW 1001",
+      "bags": 188,
+      "quantity_kg": 14400.0,
+      "rate": 0.0,
+      "total": 0.0
+    },
+    {
+      "date": "2026-11-12",
+      "invoice_no": "A28",
+      "party_name": "MITU PATRO",
+      "rst_no": "156",
+      "vehicle_no": "0D 02 DB 9691",
+      "product": "NEW 1001",
+      "bags": 70,
+      "quantity_kg": 4510.0,
+      "rate": 0.0,
+      "total": 0.0
+    },
+    {
+      "date": "2026-11-12",
+      "invoice_no": "A29",
+      "party_name": "MITU PATRO",
+      "rst_no": "157",
+      "vehicle_no": "OD O2 DF 0852",
+      "product": "NEW 1001",
+      "bags": 60,
+      "quantity_kg": 4560.0,
+      "rate": 0.0,
+      "total": 0.0
+    },
+    {
+      "date": "2026-11-12",
+      "invoice_no": "A30",
+      "party_name": "CHHANDA PATTNAIL",
+      "rst_no": "159",
+      "vehicle_no": "OD 07 AA 8129",
+      "product": "NEW MASURI",
+      "bags": 47,
+      "quantity_kg": 3830.0,
+      "rate": 1650.0,
+      "total": 82071.42857142857
+    }
+  ],
+  "payments": [
+    {
+      "date": "2026-11-11",
+      "party_name": "RAGHUNATH GOUDA",
+      "type": "PAID",
+      "mode": "CASH",
+      "amount": 50000.0,
+      "remarks": "PAID IN CASH"
+    },
+    {
+      "date": "2026-11-11",
+      "party_name": "RAGHUNATH GOUDA",
+      "type": "PAID",
+      "mode": "CASH",
+      "amount": 6913.0,
+      "remarks": "PAID IN CASH"
+    },
+    {
+      "date": "2026-11-12",
+      "party_name": "RAGHUNATH GOUDA",
+      "type": "PAID",
+      "mode": "PHONE PE",
+      "amount": 50000.0,
+      "remarks": "PAID IN PHONE PE"
+    },
+    {
+      "date": "2026-11-13",
+      "party_name": "RAGHUNATH GOUDA",
+      "type": "PAID",
+      "mode": "PHONE PE",
+      "amount": 20000.0,
+      "remarks": "PAID IN PHONE PE"
+    },
+    {
+      "date": "2026-11-10",
+      "party_name": "CHHANDA PATTNAIK",
+      "type": "PAID",
+      "mode": "CASH",
+      "amount": 100000.0,
+      "remarks": "PAID IN CASH "
+    },
+    {
+      "date": "2026-11-10",
+      "party_name": "CHHANDA PATTNAIK",
+      "type": "PAID",
+      "mode": "CASH",
+      "amount": 2856.0,
+      "remarks": "PAID IN CASH"
+    },
+    {
+      "date": "2026-11-12",
+      "party_name": "CHHANDA PATTNAIK",
+      "type": "PAID",
+      "mode": "BANK",
+      "amount": 60000.0,
+      "remarks": "PAID IN ACCOUNT"
+    },
+    {
+      "date": "2026-11-08",
+      "party_name": "MITU PATRO",
+      "type": "PAID",
+      "mode": "CASH",
+      "amount": 10000.0,
+      "remarks": "PAID IN CASG"
+    },
+    {
+      "date": "2026-11-09",
+      "party_name": "MITU PATRO",
+      "type": "PAID",
+      "mode": "CASH",
+      "amount": 50000.0,
+      "remarks": "PAID IN CASH"
+    },
+    {
+      "date": "2026-11-10",
+      "party_name": "MITU PATRO",
+      "type": "PAID",
+      "mode": "CASH",
+      "amount": 100000.0,
+      "remarks": "PAID IN CASH"
+    },
+    {
+      "date": "2026-11-11",
+      "party_name": "MITU PATRO",
+      "type": "PAID",
+      "mode": "CASH",
+      "amount": 100000.0,
+      "remarks": "PAID IN CASH"
+    },
+    {
+      "date": "2026-11-11",
+      "party_name": "MITU PATRO",
+      "type": "PAID",
+      "mode": "BANK",
+      "amount": 100000.0,
+      "remarks": "PAID IN ACCOUNT"
+    },
+    {
+      "date": "2026-10-27",
+      "party_name": "LITU SARAB",
+      "type": "PAID",
+      "mode": "CASH",
+      "amount": 50000.0,
+      "remarks": "CASH PAID"
+    },
+    {
+      "date": "2026-11-01",
+      "party_name": "LITU SARAB",
+      "type": "PAID",
+      "mode": "PHONE PE",
+      "amount": 50000.0,
+      "remarks": "PHONE PE"
+    },
+    {
+      "date": "2026-11-04",
+      "party_name": "LITU SARAB",
+      "type": "PAID",
+      "mode": "CASH",
+      "amount": 6699.0,
+      "remarks": "PAID IN CASH"
+    },
+    {
+      "date": "2026-11-06",
+      "party_name": "LITU SARAB",
+      "type": "PAID",
+      "mode": "CASH",
+      "amount": 50000.0,
+      "remarks": "PAID IN CASH"
+    },
+    {
+      "date": "2026-11-08",
+      "party_name": "LITU SARAB",
+      "type": "PAID",
+      "mode": "CASH",
+      "amount": 50000.0,
+      "remarks": "PAID IN CASH"
+    },
+    {
+      "date": "2026-11-10",
+      "party_name": "LITU SARAB",
+      "type": "PAID",
+      "mode": "CASH",
+      "amount": 80000.0,
+      "remarks": "PAID IN CASH"
+    },
+    {
+      "date": "2026-11-11",
+      "party_name": "LITU SARAB",
+      "type": "PAID",
+      "mode": "BANK",
+      "amount": 100000.0,
+      "remarks": "PAID IN ACCOUNT"
+    },
+    {
+      "date": "2026-11-09",
+      "party_name": "AKHAYA SAHU",
+      "type": "PAID",
+      "mode": "PHONE PE",
+      "amount": 40000.0,
+      "remarks": "PAID IN PHONE PE"
+    },
+    {
+      "date": "2026-11-12",
+      "party_name": "AKHAYA SAHU",
+      "type": "PAID",
+      "mode": "BANK",
+      "amount": 70000.0,
+      "remarks": "PAID IN ACCOUNT"
+    }
+  ]
+}
