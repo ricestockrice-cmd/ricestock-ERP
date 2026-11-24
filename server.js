@@ -59,6 +59,11 @@ db.exec(`
     remarks TEXT DEFAULT '',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
+
+  CREATE TABLE IF NOT EXISTS settings (
+    key TEXT PRIMARY KEY,
+    value TEXT
+  );
 `);
 
 // Helper to parse JSON body
@@ -148,6 +153,39 @@ const server = http.createServer(async (req, res) => {
           }));
         }
         return;
+      }
+
+      // 0.1 Business Profile Settings
+      if (pathname === '/api/profile') {
+        if (method === 'GET') {
+          const row = db.prepare("SELECT value FROM settings WHERE key = 'business_profile'").get();
+          let profile = {
+            millName: 'Rice Sales & Stock ERP',
+            proprietorName: '',
+            phone: '',
+            gstin: '',
+            address: ''
+          };
+          if (row && row.value) {
+            try {
+              profile = { ...profile, ...JSON.parse(row.value) };
+            } catch (e) {}
+          }
+          res.writeHead(200);
+          return res.end(JSON.stringify({ success: true, profile }));
+        } else if (method === 'POST') {
+          const body = await parseBody(req);
+          const profileData = {
+            millName: (body.millName || '').trim() || 'Rice Sales & Stock ERP',
+            proprietorName: (body.proprietorName || '').trim(),
+            phone: (body.phone || '').trim(),
+            gstin: (body.gstin || '').trim(),
+            address: (body.address || '').trim()
+          };
+          db.prepare("INSERT INTO settings (key, value) VALUES ('business_profile', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").run(JSON.stringify(profileData));
+          res.writeHead(200);
+          return res.end(JSON.stringify({ success: true, profile: profileData }));
+        }
       }
 
       // 1. Dashboard

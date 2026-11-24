@@ -8,6 +8,14 @@ try {
   createClient = require('@supabase/supabase-js').createClient;
 } catch (e) {}
 
+let memoryProfile = {
+  millName: 'Rice Sales & Stock ERP',
+  proprietorName: '',
+  phone: '',
+  gstin: '',
+  address: ''
+};
+
 // Helper to initialize Supabase client
 function getSupabase() {
   let url = process.env.SUPABASE_URL;
@@ -101,6 +109,51 @@ module.exports = async function handler(req, res) {
           success: false,
           error: 'Invalid username or password. Default is admin / admin123'
         });
+      }
+    }
+
+    // ----------------------------------------------------
+    // 0.1 BUSINESS PROFILE SETTINGS
+    // ----------------------------------------------------
+    if (pathname === '/api/profile') {
+      let defaultProfile = { ...memoryProfile };
+
+      if (req.method === 'GET') {
+        try {
+          const supabase = getSupabase();
+          const { data, error } = await supabase.from('settings').select('*').eq('key', 'business_profile').maybeSingle();
+          if (data && data.value) {
+            const parsed = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
+            defaultProfile = { ...defaultProfile, ...parsed };
+            memoryProfile = { ...defaultProfile };
+          }
+        } catch (e) {
+          // Gracefully fallback to memoryProfile if table not present
+        }
+        return sendJson(res, 200, { success: true, profile: defaultProfile });
+      }
+
+      if (req.method === 'POST') {
+        const body = await getJsonBody(req);
+        const profileData = {
+          millName: (body.millName || '').trim() || 'Rice Sales & Stock ERP',
+          proprietorName: (body.proprietorName || '').trim(),
+          phone: (body.phone || '').trim(),
+          gstin: (body.gstin || '').trim(),
+          address: (body.address || '').trim()
+        };
+        memoryProfile = { ...profileData };
+
+        try {
+          const supabase = getSupabase();
+          await supabase.from('settings').upsert({
+            key: 'business_profile',
+            value: JSON.stringify(profileData)
+          });
+        } catch (e) {
+          // Graceful fallback
+        }
+        return sendJson(res, 200, { success: true, profile: profileData });
       }
     }
 

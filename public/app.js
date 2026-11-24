@@ -13,6 +13,211 @@ let rawPurchasesData = [];
 let rawPaymentsData = [];
 let rawLedgerData = null;
 let rawSummaryData = [];
+let currentSlipState = null;
+
+// ============================================================
+// 0. BUSINESS PROFILE & REUSABLE LETTERHEAD
+// ============================================================
+const DEFAULT_BUSINESS_PROFILE = {
+  millName: 'Rice Sales & Stock ERP',
+  proprietorName: '',
+  phone: '',
+  gstin: '',
+  address: ''
+};
+
+let currentBusinessProfile = { ...DEFAULT_BUSINESS_PROFILE };
+
+function getBusinessProfile() {
+  try {
+    const cached = localStorage.getItem('rice_erp_business_profile');
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      return {
+        millName: (parsed.millName || '').trim() || DEFAULT_BUSINESS_PROFILE.millName,
+        proprietorName: (parsed.proprietorName || '').trim(),
+        phone: (parsed.phone || '').trim(),
+        gstin: (parsed.gstin || '').trim(),
+        address: (parsed.address || '').trim()
+      };
+    }
+  } catch (e) {}
+  return { ...DEFAULT_BUSINESS_PROFILE };
+}
+
+async function loadBusinessProfile() {
+  currentBusinessProfile = getBusinessProfile();
+  try {
+    const res = await fetch('/api/profile');
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && data.profile) {
+        currentBusinessProfile = {
+          millName: (data.profile.millName || '').trim() || DEFAULT_BUSINESS_PROFILE.millName,
+          proprietorName: (data.profile.proprietorName || '').trim(),
+          phone: (data.profile.phone || '').trim(),
+          gstin: (data.profile.gstin || '').trim(),
+          address: (data.profile.address || '').trim()
+        };
+        localStorage.setItem('rice_erp_business_profile', JSON.stringify(currentBusinessProfile));
+      }
+    }
+  } catch (e) {}
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function renderBusinessHeader(options = {}) {
+  const prof = getBusinessProfile();
+  const title = options.title || 'DELIVERY CHALLAN / RECEIPT';
+  const subtitle = options.subtitle || '';
+  const showEdit = options.showEditLink !== false;
+
+  let detailsParts = [];
+  if (prof.proprietorName) detailsParts.push(`<span>Prop: <strong>${escapeHtml(prof.proprietorName)}</strong></span>`);
+  if (prof.phone) detailsParts.push(`<span><i class="fa-solid fa-phone text-slate-400 mr-1"></i><strong>${escapeHtml(prof.phone)}</strong></span>`);
+  if (prof.address) detailsParts.push(`<span><i class="fa-solid fa-location-dot text-slate-400 mr-1"></i>${escapeHtml(prof.address)}</span>`);
+
+  let gstinBadge = '';
+  if (prof.gstin) {
+    gstinBadge = `
+      <div class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 mt-1 rounded border border-slate-300 bg-slate-50 text-[10px] sm:text-xs font-semibold text-slate-700">
+        <span class="text-slate-500 font-normal">GSTIN / Mandi Lic:</span>
+        <strong class="font-mono text-slate-900 tracking-wider">${escapeHtml(prof.gstin)}</strong>
+      </div>
+    `;
+  }
+
+  let editBtn = '';
+  if (showEdit) {
+    editBtn = `
+      <button type="button" onclick="openProfileModal()" class="no-print text-[11px] text-emerald-700 hover:text-emerald-900 font-semibold underline ml-1.5 transition" title="Edit Business Details & Letterhead">
+        <i class="fa-solid fa-pen-to-square mr-1"></i>Edit Info
+      </button>
+    `;
+  }
+
+  return `
+    <div class="business-letterhead text-center pb-3 border-b-2 border-[#0F4C3A]/20">
+      <div class="flex items-center justify-center gap-2 flex-wrap">
+        <h1 class="text-lg sm:text-2xl font-black text-[#0F4C3A] tracking-wide uppercase leading-tight font-sans">
+          🌾 ${escapeHtml(prof.millName || 'Rice Sales & Stock ERP')}
+        </h1>
+        ${editBtn}
+      </div>
+
+      ${detailsParts.length > 0 ? `
+        <div class="text-[11px] sm:text-xs text-slate-600 mt-1 flex flex-wrap items-center justify-center gap-x-3 gap-y-0.5">
+          ${detailsParts.join('<span class="text-slate-300">•</span>')}
+        </div>
+      ` : ''}
+
+      ${gstinBadge}
+
+      <div class="mt-2.5 pt-2 border-t border-slate-200/80">
+        <span class="inline-block px-3 py-0.5 bg-[#0F4C3A]/10 text-[#0F4C3A] font-black text-[11px] sm:text-xs tracking-wider rounded uppercase">
+          ${escapeHtml(title)}
+        </span>
+        ${subtitle ? `<p class="text-[10px] sm:text-[11px] text-slate-500 mt-0.5">${escapeHtml(subtitle)}</p>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function openProfileModal() {
+  const prof = getBusinessProfile();
+  const millInput = document.getElementById('prof_mill_name');
+  const propInput = document.getElementById('prof_proprietor');
+  const phoneInput = document.getElementById('prof_phone');
+  const gstinInput = document.getElementById('prof_gstin');
+  const addrInput = document.getElementById('prof_address');
+
+  if (millInput) millInput.value = prof.millName || '';
+  if (propInput) propInput.value = prof.proprietorName || '';
+  if (phoneInput) phoneInput.value = prof.phone || '';
+  if (gstinInput) gstinInput.value = prof.gstin || '';
+  if (addrInput) addrInput.value = prof.address || '';
+
+  updateProfilePreview();
+  openModal('profileModal');
+}
+
+function updateProfilePreview() {
+  const preview = document.getElementById('prof_live_preview');
+  if (!preview) return;
+
+  const millName = document.getElementById('prof_mill_name')?.value.trim() || 'Rice Sales & Stock ERP';
+  const proprietorName = document.getElementById('prof_proprietor')?.value.trim() || '';
+  const phone = document.getElementById('prof_phone')?.value.trim() || '';
+  const gstin = document.getElementById('prof_gstin')?.value.trim() || '';
+  const address = document.getElementById('prof_address')?.value.trim() || '';
+
+  let details = [];
+  if (proprietorName) details.push(`<span>Prop: <strong>${escapeHtml(proprietorName)}</strong></span>`);
+  if (phone) details.push(`<span><i class="fa-solid fa-phone mr-1"></i><strong>${escapeHtml(phone)}</strong></span>`);
+  if (address) details.push(`<span><i class="fa-solid fa-location-dot mr-1"></i>${escapeHtml(address)}</span>`);
+
+  preview.innerHTML = `
+    <div class="text-center space-y-1">
+      <h4 class="text-base font-black text-[#0F4C3A] uppercase tracking-wide">🌾 ${escapeHtml(millName)}</h4>
+      ${details.length > 0 ? `<div class="text-[11px] text-slate-600 flex flex-wrap items-center justify-center gap-x-2">${details.join('<span class="text-slate-300">•</span>')}</div>` : ''}
+      ${gstin ? `<div class="inline-block px-2 py-0.5 rounded border border-slate-300 bg-slate-50 text-[10px] text-slate-700">GSTIN / Mandi Lic: <strong class="font-mono">${escapeHtml(gstin)}</strong></div>` : ''}
+      <div class="text-[10px] text-emerald-800 font-bold uppercase tracking-wider pt-1 border-t border-slate-200 mt-1">Official Document Letterhead Preview</div>
+    </div>
+  `;
+}
+
+async function submitBusinessProfile(e) {
+  if (e) e.preventDefault();
+  const millName = document.getElementById('prof_mill_name')?.value.trim() || 'Rice Sales & Stock ERP';
+  const proprietorName = document.getElementById('prof_proprietor')?.value.trim() || '';
+  const phone = document.getElementById('prof_phone')?.value.trim() || '';
+  const gstin = document.getElementById('prof_gstin')?.value.trim() || '';
+  const address = document.getElementById('prof_address')?.value.trim() || '';
+
+  const profile = {
+    millName,
+    proprietorName,
+    phone,
+    gstin,
+    address
+  };
+
+  currentBusinessProfile = profile;
+  localStorage.setItem('rice_erp_business_profile', JSON.stringify(profile));
+
+  if (currentSlipState) {
+    showSlip(currentSlipState.type, currentSlipState.id);
+  }
+  const headerContainer = document.getElementById('ledger-business-header-container');
+  if (headerContainer && currentLedgerParty) {
+    headerContainer.innerHTML = renderBusinessHeader({
+      title: 'PARTY ACCOUNT STATEMENT',
+      subtitle: 'Detailed Transaction Ledger',
+      showEditLink: true
+    });
+  }
+
+  closeModal('profileModal');
+
+  try {
+    await fetch('/api/profile', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(profile)
+    });
+  } catch (err) {
+    console.warn('Failed to sync profile to server:', err);
+  }
+}
 
 // Helper: Format Indian Rupee (INR)
 function formatINR(num) {
@@ -373,8 +578,16 @@ function exportSalesCSV() {
     alert('No sales data to export.');
     return;
   }
+  const prof = getBusinessProfile();
   const headers = ['Date', 'Invoice No', 'Customer Name', 'RST No', 'Vehicle No', 'Product / Variety', 'Bags', 'Quantity (KG)', 'Rate (per 77KG)', 'Total (INR)'];
-  const rows = [headers];
+  const rows = [
+    [prof.millName || 'Rice Sales & Stock ERP'],
+    prof.address ? [prof.address + (prof.phone ? ' | Ph: ' + prof.phone : '')] : [],
+    prof.gstin ? ['GSTIN: ' + prof.gstin] : [],
+    ['OUTWARD SALES REGISTER REPORT'],
+    [],
+    headers
+  ].filter(r => r.length > 0);
 
   rawSalesData.forEach(s => {
     rows.push([
@@ -514,8 +727,16 @@ function exportPurchasesCSV() {
     alert('No purchases data to export.');
     return;
   }
+  const prof = getBusinessProfile();
   const headers = ['Date', 'Invoice No', 'Supplier Name', 'RST No', 'Vehicle No', 'Product / Variety', 'Bags', 'Quantity (KG)', 'Rate (per 77KG)', 'Total (INR)'];
-  const rows = [headers];
+  const rows = [
+    [prof.millName || 'Rice Sales & Stock ERP'],
+    prof.address ? [prof.address + (prof.phone ? ' | Ph: ' + prof.phone : '')] : [],
+    prof.gstin ? ['GSTIN: ' + prof.gstin] : [],
+    ['INWARD PURCHASE REGISTER REPORT'],
+    [],
+    headers
+  ].filter(r => r.length > 0);
 
   rawPurchasesData.forEach(p => {
     rows.push([
@@ -916,6 +1137,16 @@ async function loadPartyLedger() {
     // Make sure search input displays current party with exact balance
     setPartySearchInputValue({ ...data.party, balance: data.currentBalance });
 
+    // Populate business letterhead
+    const headerContainer = document.getElementById('ledger-business-header-container');
+    if (headerContainer) {
+      headerContainer.innerHTML = renderBusinessHeader({
+        title: 'PARTY ACCOUNT STATEMENT',
+        subtitle: fromDate && toDate ? `Statement Period: ${formatDate(fromDate)} to ${formatDate(toDate)}` : (fromDate ? `Statement From: ${formatDate(fromDate)}` : (toDate ? `Statement To: ${formatDate(toDate)}` : '')),
+        showEditLink: true
+      });
+    }
+
     document.getElementById('ledger-party-name').innerText = data.party.name;
     const badge = document.getElementById('ledger-party-badge');
     badge.innerText = data.party.type;
@@ -1021,15 +1252,19 @@ function exportPartyLedgerCSV() {
     alert('No statement data to export.');
     return;
   }
+  const prof = getBusinessProfile();
   const p = rawLedgerData.party;
   const headers = ['Date', 'Particulars / Description', 'Debit (INR)', 'Credit (INR)', 'Running Balance (INR)'];
   const rows = [
+    [prof.millName || 'Rice Sales & Stock ERP'],
+    prof.address ? [prof.address + (prof.phone ? ' | Ph: ' + prof.phone : '')] : [],
+    prof.gstin ? ['GSTIN: ' + prof.gstin] : [],
     [`PARTY ACCOUNT STATEMENT: ${p.name} (${p.type})`],
     [`Opening Balance: ${formatINR(p.opening_balance)} (As on: ${p.opening_date || '-'})`],
     [`Current Balance: ${formatINR(rawLedgerData.currentBalance)}`],
     [],
     headers
-  ];
+  ].filter(r => r.length > 0);
 
   rawLedgerData.transactions.forEach(t => {
     rows.push([
@@ -1537,61 +1772,69 @@ async function submitNewParty(e) {
 }
 
 // ============================================================
-// 10. DELIVERY SLIP / WEIGHMENT BILL PRINT
+// ============================================================
+// 10. DELIVERY SLIP / WEIGHMENT BILL PRINT & REGISTER PRINT
 // ============================================================
 function showSlip(type, id) {
   const item = (type === 'SALE' ? rawSalesData : rawPurchasesData).find(x => x.id === id);
   if (!item) return;
 
+  currentSlipState = { type, id };
   const isSale = type === 'SALE';
   const container = document.getElementById('slip-print-content');
 
+  const letterhead = renderBusinessHeader({
+    title: isSale ? 'OUTWARD SALES DELIVERY CHALLAN / INVOICE' : 'INWARD PURCHASE WEIGHMENT RECEIPT / BILL',
+    showEditLink: true
+  });
+
   container.innerHTML = `
-    <div class="text-center border-b pb-2">
-      <h2 class="text-base font-black text-slate-800 tracking-wider">🌾 RICE TRADING & MILLING ERP</h2>
-      <p class="text-[10px] text-slate-500">${isSale ? 'OUTWARD SALES DELIVERY CHALLAN' : 'INWARD PURCHASE WEIGHMENT RECEIPT'}</p>
+    ${letterhead}
+
+    <div class="grid grid-cols-2 gap-2 text-[11px] pt-3 pb-2 border-b border-slate-200">
+      <div><span class="text-slate-500 font-semibold">Date:</span> <strong>${formatDate(item.date)}</strong></div>
+      <div class="text-right"><span class="text-slate-500 font-semibold">Bill / Invoice:</span> <strong>${item.invoice_no || '-'}</strong></div>
+      <div><span class="text-slate-500 font-semibold">${isSale ? 'Customer' : 'Supplier'}:</span> <strong class="text-[#0F4C3A]">${item.party_name}</strong></div>
+      <div class="text-right"><span class="text-slate-500 font-semibold">Party Type:</span> <strong>${isSale ? 'Buyer (Customer)' : 'Seller (Supplier)'}</strong></div>
+      <div><span class="text-slate-500 font-semibold">RST (Weighment):</span> <strong>${item.rst_no || '-'}</strong></div>
+      <div class="text-right"><span class="text-slate-500 font-semibold">Vehicle No:</span> <strong class="font-mono">${item.vehicle_no || '-'}</strong></div>
     </div>
 
-    <div class="grid grid-cols-2 gap-2 text-[11px] pt-1">
-      <div><span class="text-slate-400">Date:</span> <strong>${formatDate(item.date)}</strong></div>
-      <div class="text-right"><span class="text-slate-400">Bill/Inv:</span> <strong>${item.invoice_no || '-'}</strong></div>
-      <div><span class="text-slate-400">Party:</span> <strong>${item.party_name}</strong></div>
-      <div class="text-right"><span class="text-slate-400">Type:</span> <strong>${isSale ? 'Customer' : 'Supplier'}</strong></div>
-      <div><span class="text-slate-400">RST No:</span> <strong>${item.rst_no || '-'}</strong></div>
-      <div class="text-right"><span class="text-slate-400">Vehicle No:</span> <strong>${item.vehicle_no || '-'}</strong></div>
-    </div>
-
-    <div class="border-t border-b border-slate-300 py-2 my-2">
+    <div class="py-2.5">
       <table class="w-full text-[11px]">
         <thead>
-          <tr class="text-slate-500 border-b">
-            <th class="text-left pb-1">Product</th>
-            <th class="text-right pb-1">Bags</th>
-            <th class="text-right pb-1">Weight (KG)</th>
-            <th class="text-right pb-1">Rate (77KG)</th>
-            <th class="text-right pb-1">Amount</th>
+          <tr class="text-slate-600 border-b border-slate-300 font-bold bg-slate-50">
+            <th class="text-left py-1.5 px-2">Item / Rice Variety</th>
+            <th class="text-right py-1.5 px-2">Bags</th>
+            <th class="text-right py-1.5 px-2">Weight (KG)</th>
+            <th class="text-right py-1.5 px-2">Rate (77KG)</th>
+            <th class="text-right py-1.5 px-2">Amount (₹)</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="divide-y divide-slate-100">
           <tr>
-            <td class="font-bold py-1.5">${item.product}</td>
-            <td class="text-right py-1.5">${item.bags ? item.bags.toLocaleString() : '-'}</td>
-            <td class="text-right py-1.5 font-mono">${item.quantity_kg ? item.quantity_kg.toLocaleString() : '-'}</td>
-            <td class="text-right py-1.5 font-mono">${item.rate ? item.rate.toLocaleString() : '-'}</td>
-            <td class="text-right py-1.5 font-bold font-mono text-slate-900">${formatINR(item.total)}</td>
+            <td class="font-bold py-2 px-2 text-slate-800">${item.product}</td>
+            <td class="text-right py-2 px-2">${item.bags ? item.bags.toLocaleString() : '-'}</td>
+            <td class="text-right py-2 px-2 font-mono">${item.quantity_kg ? item.quantity_kg.toLocaleString() : '-'}</td>
+            <td class="text-right py-2 px-2 font-mono">${item.rate ? item.rate.toLocaleString() : '-'}</td>
+            <td class="text-right py-2 px-2 font-bold font-mono text-slate-900">${formatINR(item.total)}</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <div class="flex justify-between items-center text-xs font-bold pt-1">
-      <span>NET AMOUNT:</span>
-      <span class="text-sm font-black text-emerald-700">${formatINR(item.total)}</span>
+    <div class="bg-slate-50 border border-slate-200 p-2.5 rounded-lg flex justify-between items-center text-xs font-bold my-2">
+      <span class="uppercase tracking-wider text-slate-700">Net Payable Amount:</span>
+      <span class="text-base font-black text-[#0F4C3A] font-mono">${formatINR(item.total)}</span>
     </div>
 
-    <div class="pt-6 flex justify-between text-[10px] text-slate-400">
-      <span>Customer/Driver Signature</span>
-      <span>Authorized Signatory</span>
+    <div class="pt-6 flex justify-between text-[10px] text-slate-500 border-t border-slate-200 mt-4">
+      <div class="text-center">
+        <p class="border-t border-dashed border-slate-400 pt-1 px-4">Party / Driver Signature</p>
+      </div>
+      <div class="text-center">
+        <p class="border-t border-dashed border-slate-400 pt-1 px-4">Authorized Signatory</p>
+      </div>
     </div>
   `;
 
@@ -1599,31 +1842,127 @@ function showSlip(type, id) {
 }
 
 function printSlip() {
-  const content = document.getElementById('slip-print-content').innerHTML;
-  const printWindow = window.open('', '_blank', 'width=650,height=600');
-  printWindow.document.write(`
-    <html>
-      <head>
-        <title>Print Slip</title>
-        <style>
-          body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 24px; color: #1e293b; }
-          table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-          th, td { padding: 6px 8px; }
-          .border-b { border-bottom: 1px solid #cbd5e1; }
-          .border-t { border-top: 1px solid #cbd5e1; }
-          .text-right { text-align: right; }
-          .text-center { text-align: center; }
-          .font-bold { font-weight: bold; }
-          .font-mono { font-family: monospace; }
-        </style>
-      </head>
-      <body>
-        ${content}
-        <script>window.onload = function() { window.print(); window.close(); }<\/script>
-      </body>
-    </html>
-  `);
-  printWindow.document.close();
+  const container = document.getElementById('slip-print-content');
+  if (!container) return;
+
+  // Set print-target only on slip-print-content
+  document.querySelectorAll('.print-target').forEach(el => {
+    if (el.id !== 'slip-print-content') el.classList.remove('print-target');
+  });
+  container.classList.add('print-target');
+
+  window.print();
+}
+
+function printRegister(type) {
+  const isSale = type === 'sales';
+  const data = isSale ? rawSalesData : rawPurchasesData;
+  const container = document.getElementById('register-print-content');
+  const titleEl = document.getElementById('reg-print-modal-title');
+
+  if (titleEl) {
+    titleEl.innerHTML = `<i class="fa-solid fa-print text-emerald-600 mr-2"></i> ${isSale ? 'Sales Register' : 'Purchase Register'} Print Preview`;
+  }
+
+  const searchVal = document.getElementById(isSale ? 'sales-search' : 'purchases-search')?.value.trim();
+  const filterSubtitle = searchVal ? `Filter: "${escapeHtml(searchVal)}" • Total ${data.length} records` : `Total ${data.length} recorded entries as of ${formatDate(new Date().toISOString().split('T')[0])}`;
+
+  const letterhead = renderBusinessHeader({
+    title: isSale ? 'OUTWARD SALES REGISTER REPORT' : 'INWARD PURCHASE REGISTER REPORT',
+    subtitle: filterSubtitle,
+    showEditLink: true
+  });
+
+  let totBags = 0;
+  let totKg = 0;
+  let totAmt = 0;
+
+  const rowsHtml = data.map((item, idx) => {
+    totBags += (item.bags || 0);
+    totKg += (item.quantity_kg || 0);
+    totAmt += (item.total || 0);
+
+    return `
+      <tr class="${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}">
+        <td class="p-1.5 border-b border-slate-200 text-slate-600 whitespace-nowrap">${formatDate(item.date)}</td>
+        <td class="p-1.5 border-b border-slate-200 font-bold">${item.invoice_no || '-'}</td>
+        <td class="p-1.5 border-b border-slate-200 font-semibold">${item.party_name}</td>
+        <td class="p-1.5 border-b border-slate-200 text-slate-500">${item.rst_no || '-'}</td>
+        <td class="p-1.5 border-b border-slate-200 font-mono text-[10px]">${item.vehicle_no || '-'}</td>
+        <td class="p-1.5 border-b border-slate-200">${item.product}</td>
+        <td class="p-1.5 border-b border-slate-200 text-right">${item.bags ? item.bags.toLocaleString() : '-'}</td>
+        <td class="p-1.5 border-b border-slate-200 text-right font-mono">${item.quantity_kg ? item.quantity_kg.toLocaleString() : '-'}</td>
+        <td class="p-1.5 border-b border-slate-200 text-right font-mono">${item.rate ? item.rate.toLocaleString() : '-'}</td>
+        <td class="p-1.5 border-b border-slate-200 text-right font-bold font-mono">${formatINR(item.total)}</td>
+      </tr>
+    `;
+  }).join('');
+
+  container.innerHTML = `
+    ${letterhead}
+
+    <div class="my-3 overflow-x-auto">
+      <table class="w-full text-[11px] border border-slate-300">
+        <thead class="bg-slate-100 text-slate-700 font-bold uppercase border-b border-slate-300">
+          <tr>
+            <th class="p-1.5 text-left">Date</th>
+            <th class="p-1.5 text-left">Inv #</th>
+            <th class="p-1.5 text-left">${isSale ? 'Customer' : 'Supplier'}</th>
+            <th class="p-1.5 text-left">RST #</th>
+            <th class="p-1.5 text-left">Vehicle #</th>
+            <th class="p-1.5 text-left">Product</th>
+            <th class="p-1.5 text-right">Bags</th>
+            <th class="p-1.5 text-right">Net Wt (KG)</th>
+            <th class="p-1.5 text-right">Rate</th>
+            <th class="p-1.5 text-right">Total (₹)</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rowsHtml || '<tr><td colspan="10" class="p-4 text-center text-slate-400">No records found</td></tr>'}
+        </tbody>
+        <tfoot class="bg-slate-100 font-bold border-t-2 border-slate-300 text-slate-800">
+          <tr>
+            <td colspan="6" class="p-2 text-right uppercase tracking-wider">Total (${data.length} records):</td>
+            <td class="p-2 text-right">${totBags.toLocaleString()}</td>
+            <td class="p-2 text-right font-mono">${totKg.toLocaleString()} KG</td>
+            <td></td>
+            <td class="p-2 text-right font-mono text-[#0F4C3A] font-black">${formatINR(totAmt)}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="pt-4 flex justify-between text-[10px] text-slate-500 border-t border-slate-200">
+      <span>Generated by Rice ERP on ${new Date().toLocaleDateString()}</span>
+      <span>Authorized Signatory</span>
+    </div>
+  `;
+
+  openModal('registerPrintModal');
+}
+
+function executeRegisterPrint() {
+  const container = document.getElementById('register-print-content');
+  if (!container) return;
+
+  document.querySelectorAll('.print-target').forEach(el => {
+    if (el.id !== 'register-print-content') el.classList.remove('print-target');
+  });
+  container.classList.add('print-target');
+
+  window.print();
+}
+
+function printPartyLedger() {
+  const container = document.getElementById('printable-ledger');
+  if (!container) return;
+
+  document.querySelectorAll('.print-target').forEach(el => {
+    if (el.id !== 'printable-ledger') el.classList.remove('print-target');
+  });
+  container.classList.add('print-target');
+
+  window.print();
 }
 
 // ============================================================
@@ -1657,6 +1996,7 @@ function showErpApp(session) {
     userText.innerText = session.displayName;
   }
 
+  loadBusinessProfile();
   setDefaultDates();
   switchTab(currentTab || 'dashboard');
 }
