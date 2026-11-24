@@ -1346,6 +1346,19 @@ function openOpeningBalanceModal() {
   openModal('opBalModal');
 }
 
+async function removeOpeningBalance() {
+  const partyName = document.getElementById('op_party_name').value.trim();
+  if (!partyName) return;
+  if (!confirm(`Are you sure you want to remove the opening balance for ${partyName}? It will be reset to ₹0.`)) {
+    return;
+  }
+  document.getElementById('op_balance_amt').value = '0';
+  document.getElementById('op_date').value = '';
+  
+  const fakeEvent = { preventDefault: () => {} };
+  await submitOpeningBalance(fakeEvent);
+}
+
 async function submitOpeningBalance(e) {
   e.preventDefault();
   const partyName = document.getElementById('op_party_name').value.trim();
