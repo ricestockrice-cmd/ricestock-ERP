@@ -72,6 +72,16 @@ CREATE POLICY "Allow public all sales" ON sales FOR ALL USING (true) WITH CHECK 
 CREATE POLICY "Allow public all purchases" ON purchases FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow public all payments" ON payments FOR ALL USING (true) WITH CHECK (true);
 
+-- Grant schema and table permissions to service_role, anon, authenticated
+GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO anon, authenticated, service_role;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated, service_role;
+GRANT ALL ON ALL ROUTINES IN SCHEMA public TO anon, authenticated, service_role;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO anon, authenticated, service_role;
+
+
 -- 3. SEED PARTIES (10 records)
 INSERT INTO parties (name, type, phone, address, opening_balance, opening_date) VALUES ('AKHAYA SAHU', 'Supplier', '', '', 200000, '2026-11-18');
 INSERT INTO parties (name, type, phone, address, opening_balance, opening_date) VALUES ('CHHANDA PATTNAIK', 'Supplier', '', '', 0, '');
