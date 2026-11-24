@@ -143,7 +143,19 @@ module.exports = async function handler(req, res) {
         }
       }
 
-      const totalSales = sales.reduce((sum, s) => sum + (s.total || 0), 0);
+      const range = url.searchParams.get('range') || 'all';
+      const todayStr = new Date().toISOString().split('T')[0];
+      const monthStr = todayStr.slice(0, 7);
+
+      let targetSales = sales;
+      if (range === 'today') {
+        targetSales = sales.filter(s => s.date === todayStr);
+      } else if (range === 'month') {
+        targetSales = sales.filter(s => s.date && s.date.startsWith(monthStr));
+      }
+
+      const totalSales = targetSales.reduce((sum, s) => sum + (s.total || 0), 0);
+      const totalSalesBags = targetSales.reduce((sum, s) => sum + (s.bags || 0), 0);
 
       // Stock by variety
       const stockMap = {};
@@ -181,10 +193,14 @@ module.exports = async function handler(req, res) {
         .slice(0, 5);
 
       return sendJson(res, 200, {
+        totalReceivable: totalReceivables,
         totalReceivables,
+        totalPayable: totalPayables,
         totalPayables,
         totalSales,
+        totalSalesBags,
         totalStockBags,
+        stock: stockByVariety,
         stockByVariety,
         recentPayments
       });

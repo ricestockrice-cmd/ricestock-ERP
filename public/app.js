@@ -103,45 +103,149 @@ function switchTab(tab) {
 // ============================================================
 // 1. DASHBOARD
 // ============================================================
+let currentKpiFilter = 'all';
+
+function setKpiFilter(filter) {
+  currentKpiFilter = filter;
+  ['today', 'month', 'all'].forEach(f => {
+    const btn = document.getElementById(`kpi-filter-${f}`);
+    if (btn) {
+      if (f === filter) {
+        btn.className = 'px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-white text-emerald-800 shadow font-bold transition';
+      } else {
+        btn.className = 'px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg transition text-slate-600 hover:text-slate-900';
+      }
+    }
+  });
+  loadDashboard();
+}
+
 async function loadDashboard() {
   try {
-    const res = await fetch('/api/dashboard');
+    const res = await fetch(`/api/dashboard?range=${currentKpiFilter}`);
     const data = await res.json();
 
-    document.getElementById('dash-receivables').innerText = formatINR(data.totalReceivable);
-    document.getElementById('dash-payables').innerText = formatINR(data.totalPayable);
-    document.getElementById('dash-sales').innerText = formatINR(data.totalSales);
-    document.getElementById('dash-sales-bags').innerText = `${(data.totalSalesBags || 0).toLocaleString()} Bags Dispatched`;
+    const rec = data.totalReceivable !== undefined ? data.totalReceivable : (data.totalReceivables || 0);
+    const pay = data.totalPayable !== undefined ? data.totalPayable : (data.totalPayables || 0);
+    document.getElementById('dash-receivables').innerText = formatINR(rec);
+    document.getElementById('dash-payables').innerText = formatINR(pay);
+
+    document.getElementById('dash-sales').innerText = formatINR(data.totalSales || 0);
+    const bagsDisp = data.totalSalesBags || 0;
+    document.getElementById('dash-sales-bags').innerText = `${bagsDisp.toLocaleString()} Bags Dispatched`;
 
     // Calculate total stock bags
-    const totalBags = (data.stock || []).reduce((acc, s) => acc + (s.current_bags || 0), 0);
+    const stockList = data.stock || data.stockByVariety || [];
+    const totalBags = stockList.reduce((acc, s) => acc + (s.current_bags || 0), 0);
     document.getElementById('dash-stock-bags').innerText = `${totalBags.toLocaleString()} Bags`;
 
-    // Stock table overview
+    // 1. Stock Overview Rendering
     const stockTbody = document.getElementById('dash-stock-tbody');
-    stockTbody.innerHTML = (data.stock || []).slice(0, 6).map(s => `
-      <tr class="hover:bg-slate-50 transition">
-        <td class="py-2.5 px-3 font-bold text-slate-800">${s.product}</td>
-        <td class="py-2.5 px-3 text-right font-medium text-slate-600">${s.bought_bags.toLocaleString()}</td>
-        <td class="py-2.5 px-3 text-right font-medium text-slate-600">${s.sold_bags.toLocaleString()}</td>
-        <td class="py-2.5 px-3 text-right font-bold ${s.current_bags >= 0 ? 'text-emerald-600' : 'text-rose-600'}">${s.current_bags.toLocaleString()}</td>
-      </tr>
-    `).join('') || '<tr><td colspan="4" class="p-4 text-center text-slate-400">No stock entries yet</td></tr>';
+    const stockMobileList = document.getElementById('dash-stock-mobile-list');
 
-    // Recent payments table
+    if (!stockList || stockList.length === 0) {
+      const emptyStockHTML = `
+        <div class="py-6 sm:py-8 px-4 text-center flex flex-col items-center justify-center">
+          <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-xl mb-2.5 shadow-sm border border-amber-100">
+            <i class="fa-solid fa-boxes-stacked"></i>
+          </div>
+          <h4 class="font-bold text-slate-800 text-xs sm:text-sm">No stock entries yet</h4>
+          <p class="text-[11px] text-slate-400 max-w-xs mt-1 mb-3">Record an inward purchase of paddy or rice to start live inventory tracking.</p>
+          <button onclick="openPurModalForAdd()" class="px-3.5 py-1.5 border border-amber-300 bg-amber-50/70 hover:bg-amber-100 text-amber-900 rounded-xl text-xs font-bold transition flex items-center shadow-sm active:scale-95">
+            <i class="fa-solid fa-wheat-awn mr-1.5 text-amber-600"></i> + Record Purchase
+          </button>
+        </div>
+      `;
+      if (stockMobileList) stockMobileList.innerHTML = emptyStockHTML;
+      if (stockTbody) stockTbody.innerHTML = `<tr><td colspan="4">${emptyStockHTML}</td></tr>`;
+    } else {
+      const topStock = stockList.slice(0, 6);
+      if (stockMobileList) {
+        stockMobileList.innerHTML = topStock.map(s => `
+          <div class="flex items-center justify-between p-2.5 bg-slate-50/90 hover:bg-slate-100/80 rounded-xl transition border border-slate-100">
+            <div class="min-w-0 flex-1 pr-2">
+              <p class="font-bold text-slate-800 text-xs truncate">${s.product}</p>
+              <p class="text-[10px] text-slate-500 mt-0.5">Bought: <span class="font-semibold text-slate-700">${(s.bought_bags || 0).toLocaleString()}</span> | Sold: <span class="font-semibold text-slate-700">${(s.sold_bags || 0).toLocaleString()}</span></p>
+            </div>
+            <div class="shrink-0 text-right">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-black font-mono tabular-nums ${s.current_bags > 0 ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : (s.current_bags === 0 ? 'bg-slate-100 text-slate-600' : 'bg-rose-100 text-rose-800 border border-rose-200')}">
+                ${(s.current_bags || 0).toLocaleString()} Bags
+              </span>
+            </div>
+          </div>
+        `).join('');
+      }
+      if (stockTbody) {
+        stockTbody.innerHTML = topStock.map(s => `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-2.5 px-3 font-bold text-slate-800">${s.product}</td>
+            <td class="py-2.5 px-3 text-right font-medium text-slate-600 font-mono tabular-nums">${(s.bought_bags || 0).toLocaleString()}</td>
+            <td class="py-2.5 px-3 text-right font-medium text-slate-600 font-mono tabular-nums">${(s.sold_bags || 0).toLocaleString()}</td>
+            <td class="py-2.5 px-3 text-right font-bold font-mono tabular-nums ${s.current_bags >= 0 ? 'text-emerald-600' : 'text-rose-600'}">${(s.current_bags || 0).toLocaleString()}</td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    // 2. Recent Payments Rendering
+    const payments = data.recentPayments || [];
     const payTbody = document.getElementById('dash-payments-tbody');
-    payTbody.innerHTML = (data.recentPayments || []).map(p => `
-      <tr class="hover:bg-slate-50 transition">
-        <td class="py-2.5 px-3 text-slate-500 whitespace-nowrap">${formatDate(p.date)}</td>
-        <td class="py-2.5 px-3 font-semibold text-slate-800">${p.party_name}</td>
-        <td class="py-2.5 px-3">
-          <span class="px-2 py-0.5 rounded text-[10px] font-bold ${p.type === 'PAID' ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800'}">
-            ${p.type}
-          </span>
-        </td>
-        <td class="py-2.5 px-3 text-right font-bold text-slate-800">${formatINR(p.amount)}</td>
-      </tr>
-    `).join('') || '<tr><td colspan="4" class="p-4 text-center text-slate-400">No recent payments</td></tr>';
+    const payMobileList = document.getElementById('dash-payments-mobile-list');
+
+    if (!payments || payments.length === 0) {
+      const emptyPayHTML = `
+        <div class="py-6 sm:py-8 px-4 text-center flex flex-col items-center justify-center">
+          <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center text-xl mb-2.5 shadow-sm border border-blue-100">
+            <i class="fa-solid fa-hand-holding-dollar"></i>
+          </div>
+          <h4 class="font-bold text-slate-800 text-xs sm:text-sm">No recent payments</h4>
+          <p class="text-[11px] text-slate-400 max-w-xs mt-1 mb-3">Record payments paid to suppliers or money received from customers.</p>
+          <button onclick="openPayModalForAdd()" class="px-3.5 py-1.5 border border-blue-300 bg-blue-50/70 hover:bg-blue-100 text-blue-900 rounded-xl text-xs font-bold transition flex items-center shadow-sm active:scale-95">
+            <i class="fa-solid fa-money-bill-wave mr-1.5 text-blue-600"></i> + Record Payment
+          </button>
+        </div>
+      `;
+      if (payMobileList) payMobileList.innerHTML = emptyPayHTML;
+      if (payTbody) payTbody.innerHTML = `<tr><td colspan="4">${emptyPayHTML}</td></tr>`;
+    } else {
+      if (payMobileList) {
+        payMobileList.innerHTML = payments.map(p => `
+          <div class="flex items-center justify-between p-2.5 bg-slate-50/90 hover:bg-slate-100/80 rounded-xl transition border border-slate-100">
+            <div class="min-w-0 flex-1 pr-2">
+              <div class="flex items-center gap-1.5">
+                <p class="font-bold text-slate-800 text-xs truncate">${p.party_name}</p>
+                <span class="px-1.5 py-0.2 rounded text-[9px] font-bold ${p.type === 'PAID' ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800'}">
+                  ${p.type}
+                </span>
+              </div>
+              <p class="text-[10px] text-slate-500 mt-0.5 flex items-center">
+                <i class="fa-regular fa-calendar text-[9px] mr-1 text-slate-400"></i> ${formatDate(p.date)}
+                ${p.mode ? `<span class="mx-1">•</span><span>${p.mode}</span>` : ''}
+              </p>
+            </div>
+            <div class="shrink-0 text-right">
+              <span class="font-bold font-mono tabular-nums text-xs ${p.type === 'PAID' ? 'text-rose-600' : 'text-emerald-600'}">
+                ${p.type === 'PAID' ? '-' : '+'}${formatINR(p.amount)}
+              </span>
+            </div>
+          </div>
+        `).join('');
+      }
+      if (payTbody) {
+        payTbody.innerHTML = payments.map(p => `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-2.5 px-3 text-slate-500 whitespace-nowrap font-mono text-[11px]">${formatDate(p.date)}</td>
+            <td class="py-2.5 px-3 font-semibold text-slate-800">${p.party_name}</td>
+            <td class="py-2.5 px-3">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${p.type === 'PAID' ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800'}">
+                ${p.type}
+              </span>
+            </td>
+            <td class="py-2.5 px-3 text-right font-bold text-slate-800 font-mono tabular-nums">${formatINR(p.amount)}</td>
+          </tr>
+        `).join('');
+      }
+    }
 
   } catch (err) {
     console.error('Failed to load dashboard:', err);

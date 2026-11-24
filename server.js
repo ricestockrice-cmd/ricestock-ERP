@@ -165,7 +165,18 @@ const server = http.createServer(async (req, res) => {
           }
         }
 
-        const totalSalesAmt = db.prepare('SELECT COALESCE(SUM(total), 0) as val, COALESCE(SUM(bags), 0) as bags FROM sales').get();
+        const range = url.searchParams.get('range') || 'all';
+        const todayStr = new Date().toISOString().split('T')[0];
+        const monthStr = todayStr.slice(0, 7);
+
+        let totalSalesAmt;
+        if (range === 'today') {
+          totalSalesAmt = db.prepare('SELECT COALESCE(SUM(total), 0) as val, COALESCE(SUM(bags), 0) as bags FROM sales WHERE date = ?').get(todayStr);
+        } else if (range === 'month') {
+          totalSalesAmt = db.prepare('SELECT COALESCE(SUM(total), 0) as val, COALESCE(SUM(bags), 0) as bags FROM sales WHERE date LIKE ?').get(monthStr + '%');
+        } else {
+          totalSalesAmt = db.prepare('SELECT COALESCE(SUM(total), 0) as val, COALESCE(SUM(bags), 0) as bags FROM sales').get();
+        }
         const totalPurAmt = db.prepare('SELECT COALESCE(SUM(total), 0) as val, COALESCE(SUM(bags), 0) as bags FROM purchases').get();
 
         const stockItems = db.prepare(`
