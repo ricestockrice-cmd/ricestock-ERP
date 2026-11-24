@@ -7,11 +7,13 @@ const { createClient } = require('@supabase/supabase-js');
 
 // Helper to initialize Supabase client
 function getSupabase() {
-  const url = process.env.SUPABASE_URL;
+  let url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || process.env.SUPABASE_ANON_KEY;
   if (!url || !key) {
     throw new Error('Supabase environment variables (SUPABASE_URL and SUPABASE_KEY) are not set.');
   }
+  // Strip trailing /rest/v1 or slashes if user pasted full REST endpoint
+  url = url.trim().replace(/\/rest\/v1\/?$/, '').replace(/\/+$/, '');
   return createClient(url, key);
 }
 
