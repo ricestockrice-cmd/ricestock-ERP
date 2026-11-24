@@ -3,7 +3,10 @@
 // Connected to Supabase Cloud Database (PostgreSQL)
 // ============================================================
 
-const { createClient } = require('@supabase/supabase-js');
+let createClient;
+try {
+  createClient = require('@supabase/supabase-js').createClient;
+} catch (e) {}
 
 // Helper to initialize Supabase client
 function getSupabase() {
@@ -69,6 +72,38 @@ module.exports = async function handler(req, res) {
   }
 
   try {
+    // ----------------------------------------------------
+    // 0. AUTHENTICATION (LOGIN)
+    // ----------------------------------------------------
+    if (pathname === '/api/auth/login' && req.method === 'POST') {
+      const body = await getJsonBody(req);
+      const username = (body.username || '').trim().toLowerCase();
+      const password = (body.password || '').trim();
+
+      // Master admin credentials
+      const validUsers = {
+        'admin': ['admin123', 'admin', 'rice123'],
+        'sima': ['admin123', 'sima123']
+      };
+
+      if (validUsers[username] && validUsers[username].includes(password)) {
+        return sendJson(res, 200, {
+          success: true,
+          token: 'token_' + Date.now() + '_' + Math.random().toString(36).substring(2),
+          user: {
+            username: username === 'sima' ? 'sima' : 'admin',
+            displayName: username === 'sima' ? 'Simanchal' : 'Administrator',
+            role: 'Owner'
+          }
+        });
+      } else {
+        return sendJson(res, 401, {
+          success: false,
+          error: 'Invalid username or password. Default is admin / admin123'
+        });
+      }
+    }
+
     const supabase = getSupabase();
 
     // ----------------------------------------------------

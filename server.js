@@ -118,6 +118,38 @@ const server = http.createServer(async (req, res) => {
     res.setHeader('Content-Type', 'application/json');
 
     try {
+      // 0. Authentication (Login)
+      if (pathname === '/api/auth/login' && method === 'POST') {
+        const body = await parseBody(req);
+        const username = (body.username || '').trim().toLowerCase();
+        const password = (body.password || '').trim();
+
+        const validUsers = {
+          'admin': ['admin123', 'admin', 'rice123'],
+          'sima': ['admin123', 'sima123']
+        };
+
+        if (validUsers[username] && validUsers[username].includes(password)) {
+          res.writeHead(200);
+          res.end(JSON.stringify({
+            success: true,
+            token: 'token_' + Date.now() + '_' + Math.random().toString(36).substring(2),
+            user: {
+              username: username === 'sima' ? 'sima' : 'admin',
+              displayName: username === 'sima' ? 'Simanchal' : 'Administrator',
+              role: 'Owner'
+            }
+          }));
+        } else {
+          res.writeHead(401);
+          res.end(JSON.stringify({
+            success: false,
+            error: 'Invalid username or password. Default is admin / admin123'
+          }));
+        }
+        return;
+      }
+
       // 1. Dashboard
       if (pathname === '/api/dashboard' && method === 'GET') {
         const parties = db.prepare('SELECT * FROM parties').all();

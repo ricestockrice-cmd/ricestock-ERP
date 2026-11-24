@@ -23,55 +23,254 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
 
-  <!-- Top Navbar -->
-  <header class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white shadow-lg sticky top-0 z-40 no-print">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between h-14 sm:h-16">
-      <!-- Brand Logo & Title -->
-      <div class="flex items-center space-x-2 sm:space-x-3 shrink-0">
-        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-amber-400 text-emerald-950 flex items-center justify-center font-black text-base sm:text-xl shadow-md shrink-0">
+  <!-- ============================================================ -->
+  <!-- 🌾 HOME PAGE & SECURE LOGIN PORTAL -->
+  <!-- ============================================================ -->
+  <div id="home-portal-view" class="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 flex flex-col justify-between p-4 sm:p-6 lg:p-8 relative overflow-hidden">
+    <!-- Subtle Background Glows -->
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <!-- Home Navbar -->
+    <header class="max-w-6xl w-full mx-auto flex items-center justify-between py-2 relative z-10">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-400 text-emerald-950 flex items-center justify-center font-black text-xl shadow-lg shrink-0">
           🌾
         </div>
-        <div class="leading-tight">
-          <h1 class="text-sm sm:text-lg font-bold tracking-tight whitespace-nowrap">
-            <span class="md:hidden">Rice ERP</span>
-            <span class="hidden md:inline">Rice Sales & Stock Ledger</span>
-          </h1>
-          <p class="text-[10px] sm:text-xs text-emerald-200 hidden md:block">Mill & Trading Management Portal</p>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-white tracking-tight">Rice Sales & Stock ERP</h1>
+          <p class="text-[11px] text-emerald-300">Mill & Trading Management Portal</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <span class="bg-emerald-800/60 border border-emerald-600/40 text-emerald-200 text-xs px-3 py-1 rounded-full font-semibold hidden sm:flex items-center">
+          <i class="fa-solid fa-cloud mr-1.5 text-amber-400"></i> Supabase Cloud Live
+        </span>
+      </div>
+    </header>
+
+    <!-- Main Hero & Login Split Container -->
+    <main class="max-w-6xl w-full mx-auto my-auto py-6 sm:py-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+      
+      <!-- Left Column: Home / Product Highlights (7 cols) -->
+      <div class="lg:col-span-7 space-y-6 text-white text-left">
+        <div class="inline-flex items-center space-x-2 bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 px-3.5 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm">
+          <i class="fa-solid fa-wheat-awn text-amber-400"></i>
+          <span>Dedicated ERP for Rice Mills & Wholesale Traders</span>
+        </div>
+
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
+          Complete Mill Accounting, <br>
+          <span class="bg-gradient-to-r from-amber-300 to-emerald-400 bg-clip-text text-transparent">Stock & Party Ledgers</span>
+        </h2>
+
+        <p class="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed">
+          Streamline inward paddy procurement, live warehouse inventory, outward dispatches, RST weight receipts, double-entry party statements, and 1-click WhatsApp bills.
+        </p>
+
+        <!-- Feature Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2 max-w-xl">
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5 backdrop-blur-sm hover:bg-white/10 transition">
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-300 flex items-center justify-center mb-2">
+              <i class="fa-solid fa-boxes-stacked"></i>
+            </div>
+            <h4 class="font-bold text-sm text-white">Live Godown Inventory</h4>
+            <p class="text-xs text-slate-400 mt-0.5">Real-time bags & net weight balance by variety with auto-inward & outward.</p>
+          </div>
+
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5 backdrop-blur-sm hover:bg-white/10 transition">
+            <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center mb-2">
+              <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <h4 class="font-bold text-sm text-white">Party Ledgers & Statements</h4>
+            <p class="text-xs text-slate-400 mt-0.5">Automated running balances, Excel exports, and filterable date ranges.</p>
+          </div>
+
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5 backdrop-blur-sm hover:bg-white/10 transition">
+            <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center mb-2">
+              <i class="fa-solid fa-receipt"></i>
+            </div>
+            <h4 class="font-bold text-sm text-white">RST & Vehicle Billing</h4>
+            <p class="text-xs text-slate-400 mt-0.5">Record weighment tickets, truck numbers, invoice numbers, and bag rates.</p>
+          </div>
+
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5 backdrop-blur-sm hover:bg-white/10 transition">
+            <div class="w-8 h-8 rounded-lg bg-green-500/20 text-green-300 flex items-center justify-center mb-2">
+              <i class="fa-brands fa-whatsapp"></i>
+            </div>
+            <h4 class="font-bold text-sm text-white">1-Click WhatsApp Sharing</h4>
+            <p class="text-xs text-slate-400 mt-0.5">Send formatted balance statements directly to parties on WhatsApp.</p>
+          </div>
+        </div>
+
+        <div class="pt-2 flex flex-wrap items-center gap-4 text-xs text-slate-400">
+          <span class="flex items-center"><i class="fa-solid fa-shield-halved text-emerald-400 mr-1.5"></i> Role-Based Access</span>
+          <span class="flex items-center"><i class="fa-solid fa-database text-blue-400 mr-1.5"></i> Cloud Synchronized</span>
+          <span class="flex items-center"><i class="fa-solid fa-bolt text-amber-400 mr-1.5"></i> Instant Reports</span>
         </div>
       </div>
 
-      <!-- Desktop Quick Action Buttons (md and up: >= 768px) -->
-      <div class="hidden md:flex items-center space-x-2 shrink-0">
-        <button onclick="openModal('partyModal')" class="bg-slate-700 hover:bg-slate-600 text-white px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center shadow transition" title="Add New Customer/Supplier with Opening Balance">
-          <i class="fa-solid fa-user-plus mr-1"></i> + Party
-        </button>
-        <button onclick="openSaleModalForAdd()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center shadow transition" title="Add New Sale Dispatch">
-          <i class="fa-solid fa-cart-shopping mr-1.5"></i> + Sale
-        </button>
-        <button onclick="openPurModalForAdd()" class="bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center shadow transition" title="Add Inbound Purchase">
-          <i class="fa-solid fa-wheat-awn mr-1.5"></i> + Purchase
-        </button>
-        <button onclick="openPayModalForAdd()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center shadow transition" title="Record Payment">
-          <i class="fa-solid fa-money-bill-wave mr-1.5"></i> + Payment
-        </button>
+      <!-- Right Column: Login Card (5 cols) -->
+      <div class="lg:col-span-5 w-full max-w-md mx-auto">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-100 space-y-5 animate-fade-in text-slate-800">
+          
+          <div class="text-center space-y-1">
+            <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center mx-auto text-xl shadow-inner font-bold">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <h3 class="text-xl font-black text-slate-900 tracking-tight">Sign In to ERP Portal</h3>
+            <p class="text-xs text-slate-500">Authorized access for mill management & accounts</p>
+          </div>
+
+          <!-- Login Error Alert -->
+          <div id="login-error-alert" class="hidden bg-rose-50 border border-rose-200 text-rose-700 px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center space-x-2">
+            <i class="fa-solid fa-circle-exclamation shrink-0 text-rose-500 text-sm"></i>
+            <span id="login-error-message">Invalid username or password</span>
+          </div>
+
+          <!-- Login Form -->
+          <form id="login-form" onsubmit="handleLoginSubmit(event)" class="space-y-4 text-xs font-semibold">
+            <div>
+              <label class="block text-slate-700 mb-1.5">Username or ID</label>
+              <div class="relative flex items-center">
+                <i class="fa-solid fa-user absolute left-3.5 text-slate-400 text-sm pointer-events-none"></i>
+                <input 
+                  type="text" 
+                  id="login_username" 
+                  required 
+                  value="admin"
+                  placeholder="e.g. admin" 
+                  class="w-full h-11 border border-slate-300 rounded-xl pl-10 pr-3 text-sm font-bold text-slate-800 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
+                >
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-slate-700 mb-1.5">Password</label>
+              <div class="relative flex items-center">
+                <i class="fa-solid fa-key absolute left-3.5 text-slate-400 text-sm pointer-events-none"></i>
+                <input 
+                  type="password" 
+                  id="login_password" 
+                  required 
+                  value="admin123"
+                  placeholder="••••••••" 
+                  class="w-full h-11 border border-slate-300 rounded-xl pl-10 pr-10 text-sm font-bold text-slate-800 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
+                >
+                <button 
+                  type="button" 
+                  onclick="toggleLoginPassword()" 
+                  class="absolute right-3 text-slate-400 hover:text-slate-600 p-1" 
+                  title="Show/Hide Password"
+                >
+                  <i id="login-eye-icon" class="fa-solid fa-eye text-xs"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-xs pt-1">
+              <label class="flex items-center space-x-2 text-slate-600 cursor-pointer">
+                <input type="checkbox" id="login_remember" checked class="rounded text-emerald-600 focus:ring-emerald-500 h-4 w-4">
+                <span>Keep me signed in</span>
+              </label>
+              <span class="text-[11px] font-normal text-slate-400">
+                Default: <span class="font-bold text-slate-600">admin</span> / <span class="font-bold text-slate-600">admin123</span>
+              </span>
+            </div>
+
+            <button 
+              type="submit" 
+              id="login_submit_btn" 
+              class="w-full h-11 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-bold rounded-xl shadow-lg shadow-emerald-700/20 transition flex items-center justify-center text-sm cursor-pointer"
+            >
+              <i class="fa-solid fa-right-to-bracket mr-2"></i> Sign In to ERP Portal
+            </button>
+          </form>
+
+          <div class="pt-2 border-t border-slate-100 text-center">
+            <p class="text-[11px] text-slate-400 flex items-center justify-center">
+              <i class="fa-solid fa-shield-halved text-emerald-600 mr-1.5"></i> Protected Enterprise Session
+            </p>
+          </div>
+
+        </div>
       </div>
 
-      <!-- Mobile Quick Action Buttons (< 768px: Compact & Never Overflow) -->
-      <div class="flex md:hidden items-center space-x-1 shrink-0">
-        <button onclick="openSaleModalForAdd()" class="bg-emerald-600 active:bg-emerald-700 text-white px-2 py-1.5 rounded-lg text-xs font-bold flex items-center shadow" title="Record Sale">
-          <i class="fa-solid fa-cart-shopping mr-1 text-[11px]"></i> Sale
-        </button>
-        <button onclick="openPurModalForAdd()" class="bg-amber-600 active:bg-amber-700 text-white px-2 py-1.5 rounded-lg text-xs font-bold flex items-center shadow" title="Record Purchase">
-          <i class="fa-solid fa-wheat-awn mr-1 text-[11px]"></i> Pur
-        </button>
-        <button onclick="openPayModalForAdd()" class="bg-blue-600 active:bg-blue-700 text-white px-2 py-1.5 rounded-lg text-xs font-bold flex items-center shadow" title="Record Payment">
-          <i class="fa-solid fa-money-bill-wave mr-1 text-[11px]"></i> Pay
-        </button>
-        <button onclick="openModal('partyModal')" class="bg-slate-700 active:bg-slate-800 text-white p-1.5 rounded-lg text-xs font-bold flex items-center shadow" title="Add New Party">
-          <i class="fa-solid fa-user-plus text-[11px]"></i>
-        </button>
+    </main>
+
+    <!-- Footer of Home Page -->
+    <footer class="max-w-6xl w-full mx-auto py-3 text-center text-xs text-slate-500 relative z-10 border-t border-white/5">
+      <p>© 2026 Rice Mill & Trading Management Portal • All Rights Reserved</p>
+    </footer>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 🏢 ERP MAIN APPLICATION (PROTECTED AFTER LOGIN) -->
+  <!-- ============================================================ -->
+  <div id="erp-app-view" class="hidden min-h-screen flex flex-col">
+
+    <!-- Top Navbar -->
+    <header class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white shadow-lg sticky top-0 z-40 no-print">
+      <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between h-14 sm:h-16">
+        <!-- Brand Logo & Title -->
+        <div class="flex items-center space-x-2 sm:space-x-3 shrink-0">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-amber-400 text-emerald-950 flex items-center justify-center font-black text-base sm:text-xl shadow-md shrink-0">
+            🌾
+          </div>
+          <div class="leading-tight">
+            <h1 class="text-sm sm:text-lg font-bold tracking-tight whitespace-nowrap">
+              <span class="md:hidden">Rice ERP</span>
+              <span class="hidden md:inline">Rice Sales & Stock Ledger</span>
+            </h1>
+            <p class="text-[10px] sm:text-xs text-emerald-200 hidden md:block">Mill & Trading Management Portal</p>
+          </div>
+        </div>
+
+        <!-- Desktop Quick Action Buttons (md and up: >= 768px) -->
+        <div class="hidden md:flex items-center space-x-2 shrink-0">
+          <button onclick="openModal('partyModal')" class="bg-slate-700 hover:bg-slate-600 text-white px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center shadow transition" title="Add New Customer/Supplier with Opening Balance">
+            <i class="fa-solid fa-user-plus mr-1"></i> + Party
+          </button>
+          <button onclick="openSaleModalForAdd()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center shadow transition" title="Add New Sale Dispatch">
+            <i class="fa-solid fa-cart-shopping mr-1.5"></i> + Sale
+          </button>
+          <button onclick="openPurModalForAdd()" class="bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center shadow transition" title="Add Inbound Purchase">
+            <i class="fa-solid fa-wheat-awn mr-1.5"></i> + Purchase
+          </button>
+          <button onclick="openPayModalForAdd()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center shadow transition" title="Record Payment">
+            <i class="fa-solid fa-money-bill-wave mr-1.5"></i> + Payment
+          </button>
+
+          <!-- User Badge & Logout -->
+          <div class="flex items-center pl-2 border-l border-emerald-700/60 space-x-2">
+            <span id="user-display-badge" class="bg-emerald-950/50 text-emerald-200 px-2.5 py-1 rounded-lg text-xs font-semibold border border-emerald-700/50 flex items-center">
+              <i class="fa-solid fa-circle-user mr-1.5 text-amber-400"></i> <span id="current-username-text">Admin</span>
+            </span>
+            <button onclick="handleLogout()" class="bg-rose-700/80 hover:bg-rose-600 text-white px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center shadow transition" title="Sign Out">
+              <i class="fa-solid fa-right-from-bracket mr-1"></i> Exit
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile Quick Action Buttons (< 768px: Compact & Never Overflow) -->
+        <div class="flex md:hidden items-center space-x-1 shrink-0">
+          <button onclick="openSaleModalForAdd()" class="bg-emerald-600 active:bg-emerald-700 text-white px-2 py-1.5 rounded-lg text-xs font-bold flex items-center shadow" title="Record Sale">
+            <i class="fa-solid fa-cart-shopping mr-1 text-[11px]"></i> Sale
+          </button>
+          <button onclick="openPurModalForAdd()" class="bg-amber-600 active:bg-amber-700 text-white px-2 py-1.5 rounded-lg text-xs font-bold flex items-center shadow" title="Record Purchase">
+            <i class="fa-solid fa-wheat-awn mr-1 text-[11px]"></i> Pur
+          </button>
+          <button onclick="openPayModalForAdd()" class="bg-blue-600 active:bg-blue-700 text-white px-2 py-1.5 rounded-lg text-xs font-bold flex items-center shadow" title="Record Payment">
+            <i class="fa-solid fa-money-bill-wave mr-1 text-[11px]"></i> Pay
+          </button>
+          <button onclick="openModal('partyModal')" class="bg-slate-700 active:bg-slate-800 text-white p-1.5 rounded-lg text-xs font-bold flex items-center shadow" title="Add New Party">
+            <i class="fa-solid fa-user-plus text-[11px]"></i>
+          </button>
+          <button onclick="handleLogout()" class="bg-rose-700 active:bg-rose-800 text-white p-1.5 rounded-lg text-xs font-bold flex items-center shadow" title="Sign Out">
+            <i class="fa-solid fa-right-from-bracket text-[11px]"></i>
+          </button>
+        </div>
       </div>
-    </div>
 
     <!-- Navigation Tabs -->
     <nav class="bg-emerald-900/60 border-t border-emerald-700/50 px-2 sm:px-4 flex space-x-1 sm:space-x-3 overflow-x-auto flex-nowrap no-scrollbar smooth-scroll">
@@ -922,6 +1121,8 @@
       </div>
     </div>
   </div>
+
+  </div> <!-- End of #erp-app-view -->
 
   <script src="/app.js"></script>
 </body>
