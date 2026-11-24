@@ -463,8 +463,8 @@ module.exports = async function handler(req, res) {
           id: s.id,
           type: 'SALE',
           description: `Sale: Inv ${s.invoice_no || '-'} | ${s.product} - ${s.bags || 0} Bags = ${s.quantity_kg}KG/77 X ${s.rate} (Veh: ${s.vehicle_no || '-'}, RST: ${s.rst_no || '-'})`,
-          debit: isCustomer ? s.total : 0,
-          credit: isCustomer ? 0 : s.total
+          debit: s.total,
+          credit: 0
         });
       }
 
@@ -474,8 +474,8 @@ module.exports = async function handler(req, res) {
           id: pr.id,
           type: 'PURCHASE',
           description: `Pur: Inv ${pr.invoice_no || '-'} | ${pr.product} - ${pr.bags || 0} Bags = ${pr.quantity_kg}KG/77 X ${pr.rate} (Veh: ${pr.vehicle_no || '-'}, RST: ${pr.rst_no || '-'})`,
-          debit: isCustomer ? 0 : pr.total,
-          credit: isCustomer ? pr.total : 0
+          debit: 0,
+          credit: pr.total
         });
       }
 
@@ -484,7 +484,7 @@ module.exports = async function handler(req, res) {
         allTx.push({
           date: pm.date,
           id: pm.id,
-          type: 'PAYMENT',
+          type: isPaid ? 'PAYMENT_PAID' : 'PAYMENT_RECEIVED',
           description: `${isPaid ? 'Paid' : 'Received'} via ${pm.mode} ${pm.remarks ? '(' + pm.remarks + ')' : ''}`,
           debit: isPaid ? pm.amount : 0,
           credit: isPaid ? 0 : pm.amount
@@ -503,7 +503,11 @@ module.exports = async function handler(req, res) {
       if (fromDate) {
         for (const t of allTx) {
           if (t.date < fromDate) {
-            runningBal += (t.debit - t.credit);
+            if (isCustomer) {
+              runningBal += (t.debit - t.credit);
+            } else {
+              runningBal += (t.credit - t.debit);
+            }
           }
         }
         displayOpening = runningBal;
@@ -514,9 +518,9 @@ module.exports = async function handler(req, res) {
         date: displayOpeningDate || party.opening_date || (allTx.length ? allTx[0].date : ''),
         type: 'OPENING',
         description: `OPENING BALANCE B/F ${displayOpeningDate ? 'AS ON ' + displayOpeningDate : ''}`,
-        debit: displayOpening > 0 ? (isCustomer ? displayOpening : 0) : 0,
-        credit: displayOpening > 0 ? (isCustomer ? 0 : displayOpening) : 0,
-        balance: displayOpening
+        debit: isCustomer ? (displayOpening > 0 ? displayOpening : 0) : 0,
+        credit: !isCustomer ? (displayOpening > 0 ? displayOpening : 0) : 0,
+        balance: Math.round(displayOpening * 100) / 100
       });
 
       runningBal = displayOpening;
@@ -525,10 +529,14 @@ module.exports = async function handler(req, res) {
         if (fromDate && t.date < fromDate) continue;
         if (toDate && t.date > toDate) continue;
 
-        runningBal += (t.debit - t.credit);
+        if (isCustomer) {
+          runningBal += (t.debit - t.credit);
+        } else {
+          runningBal += (t.credit - t.debit);
+        }
         finalTx.push({
           ...t,
-          balance: runningBal
+          balance: Math.round(runningBal * 100) / 100
         });
       }
 
