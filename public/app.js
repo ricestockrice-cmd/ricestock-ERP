@@ -809,8 +809,8 @@ async function loadPartyLedger() {
     currentLedgerParty = data.party;
     rawLedgerTransactions = data.transactions || [];
 
-    // Make sure search input displays current party
-    setPartySearchInputValue(data.party);
+    // Make sure search input displays current party with exact balance
+    setPartySearchInputValue({ ...data.party, balance: data.currentBalance });
 
     document.getElementById('ledger-party-name').innerText = data.party.name;
     const badge = document.getElementById('ledger-party-badge');
